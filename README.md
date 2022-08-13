@@ -15,7 +15,7 @@ Views (patient, employee)
 Controller (EmployeeDataController.cs, EmployeeController.cs, PatientController.cs, PatientController.cs)
 
 <h3>Tara</h3>
-<strong>Final update: helped Beth to get project working, added Room authentication and upload images.</strong>
+<strong>****Final update: helped Beth to get project working, added Room authentication and upload images****</strong>
 <br>
 Models (<a href="https://github.com/Taralai0626/hostpital_project-backup/blob/master/HTTP5212_HospitalProject_Team1/Models/Room.cs">rooms.cs</a>)
 <br>

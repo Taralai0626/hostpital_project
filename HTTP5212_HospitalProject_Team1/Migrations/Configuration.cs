@@ -10,7 +10,6 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "HTTP5212_HospitalProject_Team1.Models.ApplicationDbContext";
         }
 
         protected override void Seed(HTTP5212_HospitalProject_Team1.Models.ApplicationDbContext context)

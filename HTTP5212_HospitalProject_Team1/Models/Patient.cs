@@ -26,9 +26,8 @@ namespace HTTP5212_HospitalProject_Team1.Models
         //one patient can have multiple perscription (perscription.cs have patient as foreign key)
         //one patient can have one room (foreign key is already made in room.cs)
 
-
     }
-    public class PatientDTO
+    public class PatientDto
     {
         public int PatientID { get; set; }
 

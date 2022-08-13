@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using HTTP5212_HospitalProject_Team1.Models;
-Microsoft.AspNetCore.Authorization;
+
 
 namespace HTTP5212_HospitalProject_Team1.Controllers
 {
@@ -36,7 +36,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
             List<PatientDto> PatientDtos = new List<PatientDto>();
             Patients.ForEach(a => PatientDtos.Add(new PatientDto()
             {
-                PatientId = a.PatientId,
+                PatientID = a.PatientID,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 Address = a.Address,
@@ -61,7 +61,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
             Patient Patient = db.Patients.Find(id);
             PatientDto PatientDto = new PatientDto()
             {
-                PatientId = Patient.PatientId,
+                PatientID = Patient.PatientID,
                 FirstName = Patient.FirstName,
                 LastName = Patient.LastName,
                 Address = Patient.Address,
@@ -97,11 +97,11 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != patient.PatientId)
+            if (id != patient.PatientID)
             {
                 Debug.WriteLine("ID mismatch");
                 Debug.WriteLine("GET parameter " + id);
-                Debug.WriteLine("POST parameter " + patient.PatientId);
+                Debug.WriteLine("POST parameter " + patient.PatientID);
                 return BadRequest();
             }
 
@@ -151,7 +151,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
             db.Patients.Add(patient);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = patient.PatientId }, patient);
+            return CreatedAtRoute("DefaultApi", new { id = patient.PatientID }, patient);
         }
         
          /// <summary>
@@ -191,7 +191,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
 
         private bool PatientExists(int id)
         {
-            return db.Patients.Count(e => e.PatientId == id) > 0;
+            return db.Patients.Count(e => e.PatientID == id) > 0;
         }
     }
 }

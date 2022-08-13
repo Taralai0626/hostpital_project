@@ -19,9 +19,14 @@ namespace HTTP5212_HospitalProject_Team1.Models
 
         public bool Availability { get; set; }
 
+        public bool RoomHasPic { get; set; }
+
+        public string PicExtension { get; set; }
+
         [ForeignKey("Patient")]
         public int PatientID { get; set; }
         public virtual Patient Patient { get; set; }
+
     }
 
     public class RoomDto
@@ -34,6 +39,8 @@ namespace HTTP5212_HospitalProject_Team1.Models
         public int RoomNumber { get; set; }
 
         public bool Availability { get; set; }
+        public bool RoomHasPic { get; set; }
+        public string PicExtension { get; set; }
 
         public int PatientID { get; set; }
 

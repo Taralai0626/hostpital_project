@@ -21,6 +21,33 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
             client.BaseAddress = new Uri("https://localhost:44397/api/");
         }
 
+        /// <summary>
+        /// Grabs the authentication cookie sent to this controller.
+        /// For proper WebAPI authentication, you can send a post request with login credentials to the WebAPI and log the access token from the response. The controller already knows this token, so we're just passing it up the chain.
+        /// 
+        /// Here is a descriptive article which walks through the process of setting up authorization/authentication directly.
+        /// https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/individual-accounts-in-web-api
+        /// </summary>
+        private void GetApplicationCookie()
+        {
+            string token = "";
+            //HTTP client is set up to be reused, otherwise it will exhaust server resources.
+            //This is a bit dangerous because a previously authenticated cookie could be cached for
+            //a follow-up request from someone else. Reset cookies in HTTP client before grabbing a new one.
+            client.DefaultRequestHeaders.Remove("Cookie");
+            if (!User.Identity.IsAuthenticated) return;
+
+            HttpCookie cookie = System.Web.HttpContext.Current.Request.Cookies.Get(".AspNet.ApplicationCookie");
+            if (cookie != null) token = cookie.Value;
+
+            //collect token as it is submitted to the controller
+            //use it to pass along to the WebAPI.
+            Debug.WriteLine("Token Submitted is : " + token);
+            if (token != "") client.DefaultRequestHeaders.Add("Cookie", ".AspNet.ApplicationCookie=" + token);
+
+            return;
+        }
+
         // GET: Room/List
         public ActionResult List()
         {
@@ -66,6 +93,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
         }
 
         // GET: User/New
+        [Authorize]
         public ActionResult New()
         {
             //string url = "patientdata/listpatient";
@@ -78,8 +106,10 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
 
         // POST: Room/Create
         [HttpPost]
+        [Authorize]
         public ActionResult Create(Room room)
         {
+            GetApplicationCookie();//get token credentials
             Debug.WriteLine("the inputted room is:");
             Debug.WriteLine(room.RoomNumber);
             //objective: add a new room into our system using the api
@@ -109,6 +139,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
         }
 
         // GET: Room/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             string url = "roomdata/findroom/" + id;
@@ -119,8 +150,10 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
 
         // POST: Room/Update/5
         [HttpPost]
-        public ActionResult Update(int id, Room room)
+        [Authorize]
+        public ActionResult Update(int id, Room room, HttpPostedFileBase RoomPic)
         {
+            GetApplicationCookie();//get token credentials
             string url = "roomdata/updateroom/" + id;
             Debug.WriteLine(url + "This?");
             string jsonpayload = jss.Serialize(room);
@@ -129,8 +162,24 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
             content.Headers.ContentType.MediaType = "application/json";
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             Debug.WriteLine(content);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && RoomPic != null)
             {
+                //Updating the room picture as a separate request
+                Debug.WriteLine("Calling Update Image method.");
+                //Send over image data for player
+                url = "RoomData/UploadRoomPic/" + id;
+                //Debug.WriteLine("Received Room Picture "+RoomPic.FileName);
+
+                MultipartFormDataContent requestcontent = new MultipartFormDataContent();
+                HttpContent imagecontent = new StreamContent(RoomPic.InputStream);
+                requestcontent.Add(imagecontent, "RoomPic", RoomPic.FileName);
+                response = client.PostAsync(url, requestcontent).Result;
+
+                return RedirectToAction("List");
+            }
+            else if (response.IsSuccessStatusCode)
+            {
+                //No image upload, but update still successful
                 return RedirectToAction("List");
             }
             else
@@ -140,8 +189,10 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
         }
 
         // GET: Room/Delete/5
+        [Authorize]
         public ActionResult DeleteConfirm(int id)
         {
+            GetApplicationCookie();//get token credentials
             string url = "roomdata/findroom/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
             RoomDto SelectedRoom = response.Content.ReadAsAsync<RoomDto>().Result;
@@ -152,6 +203,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
+            GetApplicationCookie();//get token credentials
             string url = "roomdata/deleteroom/" + id;
             HttpContent content = new StringContent("");
             content.Headers.ContentType.MediaType = "application/json";

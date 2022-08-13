@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using HTTP5212_HospitalProject_Team1.Models;
 using System.Web.Script.Serialization;
-Microsoft.AspNetCore.Authorization;
+
 
 namespace HTTP5212_HospitalProject_Team1.Controllers
 {
@@ -40,7 +40,7 @@ namespace HTTP5212_HospitalProject_Team1.Controllers
         }
 
         // GET: Employee/Details/5
-        [Authorize]
+    
         public ActionResult Details(int id)
         {
             //HttpClient client = new HttpClient() { };

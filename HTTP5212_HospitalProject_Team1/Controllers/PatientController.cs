@@ -7,7 +7,7 @@ using HTTP5212_HospitalProject_Team1.Models;
 using System.Web.Script.Serialization;
 using System.Diagnostics;
 using System.Net.Http;
-Microsoft.AspNetCore.Authorization;
+
 
 namespace HTTP5212_HospitalProject_Team1.Controllers
 {

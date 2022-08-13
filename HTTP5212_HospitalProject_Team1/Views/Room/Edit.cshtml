@@ -1,4 +1,4 @@
-﻿@model HTTP5212_HospitalProject_Team1.Models.RoomDto
+﻿@model HTTP5212_HospitalProject_Team1.Models.ViewModels.UpdateRoom
 @{
     ViewBag.Title = "Edit";
 }
@@ -6,36 +6,39 @@
 <div class="back-list">
     <a href="/Room/List">Go Back To Room List</a>
     <p> / </p>
-    <a href="/Room/Details/@Model.RoomId">Go Back To Details</a>
+    <a href="/Room/Details/@Model.SelectedRoom.RoomId">Go Back To Details</a>
 </div>
-<h2 class="create-title">Update Room For @Model.RoomNumber</h2>
+<h2 class="create-title">Update Room For @Model.SelectedRoom.RoomNumber</h2>
 <div class="form-wrapper">
-    <form class="form-floating mb-3" action="/Room/Update/@Model.RoomId" method="POST">
+    <form class="form-floating mb-3" action="/Room/Update/@Model.SelectedRoom.RoomId" method="POST" enctype = "multipart/form-data">
         <div class="input-wrapper">
             <div style="display:none;">
                 @* Pass through the Room ID *@
-                <input class="form-control" id="floatingInput" type="text" name="RoomId" value="@Model.RoomId" />
+                <input class="form-control" id="floatingInput" type="text" name="RoomId" value="@Model.SelectedRoom.RoomId" />
             </div>
             <div>
-                <label for="floatingInput">Room Number:</label> <input class="form-control" id="floatingInput" type="text" name="RoomNumber" value="@Model.RoomNumber" />
+                <label for="floatingInput">Room Number:</label> <input class="form-control" id="floatingInput" type="text" name="RoomNumber" value="@Model.SelectedRoom.RoomNumber" />
             </div>
             <div>
-                <label for="floatingInput">Room Type:</label> <input class="form-control" id="floatingInput" type="text" name="RoomType" value="@Model.RoomType" />
+                <label for="floatingInput">Room Type:</label> <input class="form-control" id="floatingInput" type="text" name="RoomType" value="@Model.SelectedRoom.RoomType" />
             </div>
             <div>
-                <!--<label for="floatingInput">Availability:</label>
-                    <input class="form-control" id="floatingInput" type="checkbox" name="Availability" value="y" />-->
-                    <label for="floatingInput">Availability:</label>
-                    <input type="checkbox" name="Availability" value="true"
-                           @(Model.Availability ? "checked" : "") />
-                </div>
-                </div>
-                <div>
-                    <label for="floatingInput">Patient:</label> <input class="form-control" id="floatingInput" type="text" name="PatientID" value="@Model.PatientID" />
-                </div>
-                <div>
-                    <input class="btn btn-primary add-button" type="submit" value="Update Room" />
-                </div>
+            <!--<label for="floatingInput">Availability:</label>
+                <input class="form-control" id="floatingInput" type="checkbox" name="Availability" value="y" />-->
+                <label for="floatingInput">Availability:</label>
+                <input type="checkbox" name="Availability" value="true"
+                        @(Model.SelectedRoom.Availability ? "checked" : "") />
             </div>
-        </form>
-    </div>
+            </div>
+            <div>
+                <label for="floatingInput">Patient:</label> <input class="form-control" id="floatingInput" type="text" name="PatientID" value="@Model.SelectedRoom.PatientID" />
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <input type="file" name="RoomPic" />
+            </div>
+            <div>
+                <input class="btn btn-primary add-button" type="submit" value="Update Room" />
+            </div>
+         </div>
+    </form>
+</div>
